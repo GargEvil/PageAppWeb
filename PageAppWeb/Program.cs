@@ -1,3 +1,6 @@
+using PageApp.Infrastracture;
+using PageAppWeb;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+builder.Services.AddPersistance(configuration);
+builder.Services.AddServices();
 
 var app = builder.Build();
 
