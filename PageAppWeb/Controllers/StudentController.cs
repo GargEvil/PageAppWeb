@@ -3,7 +3,7 @@ using PageApp.Infrastracture.Models;
 using PageAppWeb.Services;
 
 namespace PageAppWeb.Controllers;
-[Route("api/[controller]")]
+[Route("api/student")]
 [ApiController]
 public class StudentController : ControllerBase
 {
@@ -14,9 +14,29 @@ public class StudentController : ControllerBase
         _studentService = studentService;
     }
 
-    [HttpGet(Name = "GetAllStudents")]
-    public async Task<List<Student>> Get()
+    [HttpGet("get")]
+    public async Task<ActionResult> Get()
     {
-        return await _studentService.GetAllStudents();
+        return Ok(await _studentService.GetAllStudents());
+    }
+
+    [HttpPost("add")]
+    public async Task<ActionResult> Add([FromBody] Student student)
+    {
+        await _studentService.AddStudent(student);
+        return Ok();
+    }
+
+    [HttpPut("update/{id}")]
+    public async Task<ActionResult> Update([FromRoute] int id, [FromBody] Student student)
+    {
+        return Ok(await _studentService.UpdateStudent(id, student));
+    }
+
+    [HttpDelete("delete{id}")]
+    public async Task<ActionResult> Delete([FromRoute] int id)
+    {
+        await _studentService.DeleteStudent(id);
+        return Ok();
     }
 }

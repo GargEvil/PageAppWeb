@@ -12,8 +12,35 @@ public class StudentService : IStudentService
         _studentRepository = studentRepository;
     }
 
+    public async Task AddStudent(Student student)
+    {
+        await _studentRepository.Add(student);
+    }
+
+    public async Task DeleteStudent(int id)
+    {
+        var student = await _studentRepository.GetById(id);
+        await _studentRepository.Delete(student);
+    }
+
     public async Task<List<Student>> GetAllStudents()
     {
-        return await _studentRepository.GetAllStudents();
+        return await _studentRepository.GetAll();
+    }
+
+    public async Task<Student> UpdateStudent(int id, Student student)
+    {
+        var studentToBeUpdated = await _studentRepository.GetById(id);
+
+        if (studentToBeUpdated != null)
+        {
+            studentToBeUpdated.Name = student.Name;
+            studentToBeUpdated.Surname = student.Surname;
+            studentToBeUpdated.IndexNumber = student.IndexNumber;
+            studentToBeUpdated.StudentStatusId = student.StudentStatusId;
+            studentToBeUpdated.Year = student.Year;
+        }
+
+        return await _studentRepository.Update(studentToBeUpdated);
     }
 }
