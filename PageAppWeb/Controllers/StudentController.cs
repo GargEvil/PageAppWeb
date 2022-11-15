@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PageApp.Infrastracture.Models;
 using PageAppWeb.Services;
 
 namespace PageAppWeb.Controllers;
 [Route("api/student")]
 [ApiController]
+[Authorize]
 public class StudentController : ControllerBase
 {
     private readonly IStudentService _studentService;
