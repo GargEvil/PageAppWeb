@@ -34,7 +34,7 @@ public class StudentController : ControllerBase
         return Ok(await _studentService.UpdateStudent(id, student));
     }
 
-    [HttpDelete("delete{id}")]
+    [HttpDelete("delete/{id}")]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
         await _studentService.DeleteStudent(id);

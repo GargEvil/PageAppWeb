@@ -1,4 +1,5 @@
 using PageApp.Infrastracture;
+using PageApp.Infrastracture.ExceptionHandling;
 using PageAppWeb;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalExceptionHandler>();
 
 app.UseHttpsRedirection();
 
