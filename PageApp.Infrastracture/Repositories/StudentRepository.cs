@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using PageApp.Infrastracture.Models;
+using System.Data;
 using System.Linq;
 
 namespace PageApp.Infrastracture.Repositories;
@@ -27,7 +29,15 @@ public class StudentRepository : IStudentRepository
 
     public async Task<List<Student>> GetAll()
     {
-        return await _context.Students.ToListAsync();
+        using (IDbConnection connection = _context.Database.GetDbConnection())
+        {
+            connection.Open();
+
+            var record = await connection.QueryMultipleAsync("GetAllStudentsSP", commandType: CommandType.StoredProcedure);
+
+            return record.Read<Student>().ToList();
+
+        }
     }
 
     public async Task<Student> GetById(int id)
