@@ -16,6 +16,7 @@ public static class ServiceConfiguration
 
         services.AddScoped<IStudentService, StudentService>();
         services.AddScoped<IMapper, Mapper>();
+        services.AddScoped<ICourseService, CourseService>();
 
         return services;
     }

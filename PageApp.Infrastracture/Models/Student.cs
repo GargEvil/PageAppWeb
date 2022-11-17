@@ -2,11 +2,16 @@
 
 public class Student
 {
+    public Student()
+    {
+        Courses = new HashSet<Course>();
+    }
+
     public int StudentId { get; set; }
-    public string IndexNumber { get; set; }
-    public string Name { get; set; }
-    public string Surname { get; set; }
+    public string IndexNumber { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Surname { get; set; } = string.Empty;
     public int Year { get; set; }
     public int StudentStatusId { get; set; }
-
+    public virtual ICollection<Course> Courses { get; set; }
 }

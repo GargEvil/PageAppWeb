@@ -15,4 +15,5 @@ public partial class PageAppDbContext : DbContext
 
     public DbSet<Student> Students { get; set; }
     public DbSet<StudentStatus> StudentStatuses { get; set; }
+    public DbSet<Course> Courses { get; set; }
 }

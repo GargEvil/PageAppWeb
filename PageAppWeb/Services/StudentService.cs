@@ -18,7 +18,7 @@ public class StudentService : IStudentService
 
     public async Task AddStudent(StudentDTO student)
     {
-        await _studentRepository.Add(_mapper.MapToDomainModel(student));
+        await _studentRepository.Add(_mapper.MapToStudentDomainModel(student));
     }
 
     public async Task DeleteStudent(int id)
@@ -35,7 +35,7 @@ public class StudentService : IStudentService
     {
         var students = await _studentRepository.GetAll();
 
-        return await _mapper.MapToListViewModelAsync(students);
+        return await _mapper.MapToListStudentDtoAsync(students);
     }
 
     public async Task<StudentDTO> UpdateStudent(int id, StudentDTO student)
@@ -52,7 +52,7 @@ public class StudentService : IStudentService
         studentToBeUpdated.Year = student.Year;
 
         var updatedStudent = await _studentRepository.Update(studentToBeUpdated);
-        return await _mapper.MapToViewModelAsync(updatedStudent);
+        return await _mapper.MapToStudentDtoAsync(updatedStudent);
     }
 
 }

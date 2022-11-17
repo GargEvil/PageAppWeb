@@ -13,7 +13,7 @@ public class Mapper : IMapper
         _studentStatusRepository = studentStatusRepository;
     }
 
-    public async Task<StudentDTO> MapToViewModelAsync(Student student)
+    public async Task<StudentDTO> MapToStudentDtoAsync(Student student)
     {
         return new StudentDTO
         {
@@ -37,7 +37,7 @@ public class Mapper : IMapper
         };
     }
 
-    public async Task<List<StudentDTO>> MapToListViewModelAsync(List<Student> students)
+    public async Task<List<StudentDTO>> MapToListStudentDtoAsync(ICollection<Student> students)
     {
         var studentDtos = new List<StudentDTO>();
 
@@ -58,7 +58,7 @@ public class Mapper : IMapper
         return studentDtos;
     }
 
-    public Student MapToDomainModel(StudentDTO studentDTO)
+    public Student MapToStudentDomainModel(StudentDTO studentDTO)
     {
         return new Student
         {
@@ -68,5 +68,59 @@ public class Mapper : IMapper
             Surname = studentDTO.Surname,
             IndexNumber = studentDTO.IndexNumber
         };
+    }
+
+    public Course MapToCourseDomainModel(CourseDTO courseDTO)
+    {
+        return new Course
+        {
+            CourseId = courseDTO.CourseId,
+            CourseName = courseDTO.CourseName,
+            Students = MapToStudentListDomainModel(courseDTO.Students)
+        };
+    }
+
+    public List<Student> MapToStudentListDomainModel(List<StudentDTO> studentsDtos)
+    {
+        var students = new List<Student>();
+
+        foreach (var studentDto in studentsDtos)
+        {
+            students.Add(new Student
+            {
+                StudentStatusId = studentDto.StudentStatusId,
+                Name = studentDto.Name,
+                Year = studentDto.Year,
+                Surname = studentDto.Surname,
+                IndexNumber = studentDto.IndexNumber
+            });
+        }
+        return students;
+    }
+
+    public CourseDTO MapToCourseDTO(Course course)
+    {
+        return new CourseDTO
+        {
+            CourseId = course.CourseId,
+            CourseName = course.CourseName
+        };
+    }
+
+    public async Task<List<CourseDTO>> MapToCourseDtoList(List<Course> courses)
+    {
+        var courseDTOs = new List<CourseDTO>();
+
+        foreach (var course in courses)
+        {
+            courseDTOs.Add(new CourseDTO
+            {
+                CourseId = course.CourseId,
+                CourseName = course.CourseName,
+                Students = await MapToListStudentDtoAsync(course.Students)
+            });
+        }
+
+        return courseDTOs;
     }
 }
