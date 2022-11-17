@@ -1,6 +1,8 @@
 ﻿using Moq;
 using PageApp.Infrastracture.Models;
 using PageApp.Infrastracture.Repositories;
+using PageAppWeb.CustomMapper;
+using PageAppWeb.DTOs;
 using PageAppWeb.Exceptions;
 using PageAppWeb.Services;
 
@@ -8,12 +10,13 @@ namespace PageAppWeb.Tests;
 public class StudentServiceTests
 {
     private readonly Mock<IStudentRepository> _studentRepositoryMock = new();
+    private readonly Mock<IMapper> _mapperMock = new();
     private readonly StudentService _studentService;
 
 
     public StudentServiceTests()
     {
-        _studentService = new StudentService(_studentRepositoryMock.Object);
+        _studentService = new StudentService(_studentRepositoryMock.Object, _mapperMock.Object);
     }
 
     [Fact]
@@ -23,7 +26,7 @@ public class StudentServiceTests
         _studentRepositoryMock.Setup(e => e.Add(It.IsAny<Student>())).Verifiable();
 
         //Act
-        await _studentService.AddStudent(It.IsAny<Student>());
+        await _studentService.AddStudent(It.IsAny<StudentDTO>());
 
         //Assert
         _studentRepositoryMock.Verify(x => x.Add(It.IsAny<Student>()), Times.Once);
@@ -66,32 +69,16 @@ public class StudentServiceTests
     public async Task UpdateStudent_ShouldReturnStudentFromDb_EnsureUpdateCalledOnce()
     {
         //Arrange
-        var student = new Student
-        {
-            Name = "John",
-            Surname = "Doe",
-            Year = 3,
-            IndexNumber = "IB4343",
-            StudentStatusId = 1
-        };
-        var newStudent = new Student
-        {
-            Name = "John",
-            Surname = "Johnson",
-            Year = 1,
-            IndexNumber = "IB4343",
-            StudentStatusId = 1
-        };
-        _studentRepositoryMock.Setup(e => e.GetById(It.IsAny<int>())).ReturnsAsync(student);
-        _studentRepositoryMock.Setup(e => e.Update(It.IsAny<Student>())).ReturnsAsync(student);
+        _studentRepositoryMock.Setup(e => e.GetById(It.IsAny<int>())).ReturnsAsync(Mock.Of<Student>());
+        _studentRepositoryMock.Setup(e => e.Update(It.IsAny<Student>())).ReturnsAsync(It.IsAny<Student>());
+        _mapperMock.Setup(e => e.MapToViewModelAsync(It.IsAny<Student>())).ReturnsAsync(It.IsAny<StudentDTO>());
 
         //Act
-        var result = await _studentService.UpdateStudent(It.IsAny<int>(), newStudent);
+        await _studentService.UpdateStudent(It.IsAny<int>(), Mock.Of<StudentDTO>());
 
         //Assert
-        Assert.Equal(result.Surname, newStudent.Surname);
-        Assert.Equal(result.Year, newStudent.Year);
         _studentRepositoryMock.Verify(e => e.Update(It.IsAny<Student>()), Times.Once);
+        _mapperMock.Verify(e => e.MapToViewModelAsync(It.IsAny<Student>()), Times.Once);
     }
 
     [Fact]
@@ -104,7 +91,7 @@ public class StudentServiceTests
 
         //Act
         var result = await Assert.ThrowsAsync<StudentNotFoundException>(async () =>
-                     await _studentService.UpdateStudent(id, It.IsAny<Student>()));
+                     await _studentService.UpdateStudent(id, It.IsAny<StudentDTO>()));
 
         //Assert
         Assert.Equal("Student with given id 4421 is not found!", result.Message);

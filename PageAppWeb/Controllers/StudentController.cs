@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PageApp.Infrastracture.Models;
+using PageAppWeb.DTOs;
 using PageAppWeb.Services;
 
 namespace PageAppWeb.Controllers;
 [Route("api/student")]
 [ApiController]
-[Authorize]
 public class StudentController : ControllerBase
 {
     private readonly IStudentService _studentService;
@@ -23,14 +23,14 @@ public class StudentController : ControllerBase
     }
 
     [HttpPost("add")]
-    public async Task<ActionResult> Add([FromBody] Student student)
+    public async Task<ActionResult> Add([FromBody] StudentDTO student)
     {
         await _studentService.AddStudent(student);
         return Ok();
     }
 
     [HttpPut("update/{id}")]
-    public async Task<ActionResult> Update([FromRoute] int id, [FromBody] Student student)
+    public async Task<ActionResult> Update([FromRoute] int id, [FromBody] StudentDTO student)
     {
         return Ok(await _studentService.UpdateStudent(id, student));
     }

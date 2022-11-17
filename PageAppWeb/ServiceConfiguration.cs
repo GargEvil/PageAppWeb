@@ -1,4 +1,5 @@
-﻿using PageAppWeb.Services;
+﻿using PageAppWeb.CustomMapper;
+using PageAppWeb.Services;
 
 namespace PageAppWeb;
 
@@ -14,6 +15,7 @@ public static class ServiceConfiguration
         });
 
         services.AddScoped<IStudentService, StudentService>();
+        services.AddScoped<IMapper, Mapper>();
 
         return services;
     }

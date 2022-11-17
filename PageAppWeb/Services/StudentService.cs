@@ -1,5 +1,6 @@
-﻿using PageApp.Infrastracture.Models;
-using PageApp.Infrastracture.Repositories;
+﻿using PageApp.Infrastracture.Repositories;
+using PageAppWeb.CustomMapper;
+using PageAppWeb.DTOs;
 using PageAppWeb.Exceptions;
 
 namespace PageAppWeb.Services;
@@ -7,15 +8,17 @@ namespace PageAppWeb.Services;
 public class StudentService : IStudentService
 {
     private readonly IStudentRepository _studentRepository;
+    private readonly IMapper _mapper;
 
-    public StudentService(IStudentRepository studentRepository)
+    public StudentService(IStudentRepository studentRepository, IMapper mapper)
     {
         _studentRepository = studentRepository;
+        _mapper = mapper;
     }
 
-    public async Task AddStudent(Student student)
+    public async Task AddStudent(StudentDTO student)
     {
-        await _studentRepository.Add(student);
+        await _studentRepository.Add(_mapper.MapToDomainModel(student));
     }
 
     public async Task DeleteStudent(int id)
@@ -28,12 +31,14 @@ public class StudentService : IStudentService
         await _studentRepository.Delete(student);
     }
 
-    public async Task<List<Student>> GetAllStudents()
+    public async Task<List<StudentDTO>> GetAllStudents()
     {
-        return await _studentRepository.GetAll();
+        var students = await _studentRepository.GetAll();
+
+        return await _mapper.MapToListViewModelAsync(students);
     }
 
-    public async Task<Student> UpdateStudent(int id, Student student)
+    public async Task<StudentDTO> UpdateStudent(int id, StudentDTO student)
     {
         var studentToBeUpdated = await _studentRepository.GetById(id);
 
@@ -46,6 +51,8 @@ public class StudentService : IStudentService
         studentToBeUpdated.StudentStatusId = student.StudentStatusId;
         studentToBeUpdated.Year = student.Year;
 
-        return await _studentRepository.Update(studentToBeUpdated);
+        var updatedStudent = await _studentRepository.Update(studentToBeUpdated);
+        return await _mapper.MapToViewModelAsync(updatedStudent);
     }
+
 }

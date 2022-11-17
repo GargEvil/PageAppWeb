@@ -13,6 +13,8 @@ public static class DependencyInjection
         services.AddDbContext<PageAppDbContext>(options => options.UseSqlServer(connectionString));
 
         services.AddScoped<IStudentRepository, StudentRepository>();
+        services.AddScoped<IStudentStatusRepository, StudentStatusRepository>();
+
         return services;
     }
 }

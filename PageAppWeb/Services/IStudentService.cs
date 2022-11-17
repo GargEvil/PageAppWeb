@@ -1,11 +1,11 @@
-﻿using PageApp.Infrastracture.Models;
+﻿using PageAppWeb.DTOs;
 
 namespace PageAppWeb.Services;
 
 public interface IStudentService
 {
-    Task<List<Student>> GetAllStudents();
-    Task AddStudent(Student student);
-    Task<Student> UpdateStudent(int id, Student student);
+    Task<List<StudentDTO>> GetAllStudents();
+    Task AddStudent(StudentDTO student);
+    Task<StudentDTO> UpdateStudent(int id, StudentDTO student);
     Task DeleteStudent(int id);
 }
