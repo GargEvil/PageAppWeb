@@ -23,7 +23,9 @@
                 <td class="test">
                     <img src="../assets/delete.png" alt="delete" title="Delete student"
                         @click="deleteStudent(item.studentId)" />
-                    <img src="../assets/edit.png" alt="edit" title="Edit student info" />
+                    <router-link to='/UpdateStudent/{{item.studentId}}' @click="changeState(item.studentId)"><img
+                            src="../assets/edit.png" alt="edit" title="Edit student info" />
+                    </router-link>
                     <router-link to='/StudentDetails/{{item.studentId}}' @click="changeState(item.studentId)"><img
                             src="../assets/search.png" alt="details" title="Details" />
                     </router-link>

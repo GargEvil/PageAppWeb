@@ -62,7 +62,6 @@ public class Mapper : IMapper
     {
         return new Student
         {
-            StudentId = studentDTO.StudentId,
             StudentStatusId = studentDTO.StudentStatusId,
             Name = studentDTO.Name,
             Year = studentDTO.Year,

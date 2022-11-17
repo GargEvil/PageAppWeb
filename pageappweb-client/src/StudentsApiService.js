@@ -19,7 +19,8 @@ export default {
         if (accessToken == undefined) {
             accessToken = store.getters.accessToken;
         }
-        console.log("token", accessToken);
+        console.log(data);
+
         return client({
             method,
             url: method + resource,
@@ -38,7 +39,7 @@ export default {
         return this.execute('post', '/', data)
     },
     update(id, data) {
-        return this.execute('put', `/${id}`, data)
+        return this.execute('update', `/${id}`, data)
     },
     delete(id) {
         return this.execute('delete', `/${id}`)
