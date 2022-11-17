@@ -4,57 +4,72 @@
     </div>
     <div class="tableContainer">
         <button>
-            <router-link class="nav-link" to="/CreateStudent">Add</router-link>
+            <router-link to="/CreateStudent">Add</router-link>
         </button>
+
         <table>
             <tr>
-                <th>Company</th>
-                <th>Contact</th>
-                <th>Country</th>
+                <th>Student Name</th>
+                <th>Index Number</th>
+                <th>Year</th>
                 <th>
 
                 </th>
             </tr>
-            <tr>
-                <td>Alfreds Futterkiste</td>
-                <td>Maria Anders</td>
-                <td>Germany</td>
+            <tr v-for="item in students" :key="studentId">
+                <td>{{ item.name }} {{ item.surname }}</td>
+                <td>{{ item.indexNumber }}</td>
+                <td>{{ item.year }}</td>
                 <td class="test">
-                    <img src="../assets/delete.png" alt="delete" title="Delete student" />
+                    <img src="../assets/delete.png" alt="delete" title="Delete student"
+                        @click="deleteStudent(item.studentId)" />
                     <img src="../assets/edit.png" alt="edit" title="Edit student info" />
-                    <img src="../assets/search.png" alt="details" title="Details" />
+                    <router-link to='/StudentDetails/{{item.studentId}}' @click="changeState(item.studentId)"><img
+                            src="../assets/search.png" alt="details" title="Details" />
+                    </router-link>
                 </td>
             </tr>
-            <tr>
-                <td>Centro comercial Moctezuma</td>
-                <td>Francisco Chang</td>
-                <td>Mexico</td>
-                <td class="test">
-                    <img src="../assets/delete.png" alt="delete" title="Delete student" />
-                    <img src="../assets/edit.png" alt="edit" title="Edit student info" />
-                    <img src="../assets/search.png" alt="details" title="Details" />
-                </td>
-            </tr>
-            <tr>
-                <td>Ernst Handel</td>
-                <td>Roland Mendel</td>
-                <td>Austria</td>
-                <td class="test">
-                    <img src="../assets/delete.png" alt="delete" title="Delete student" />
-                    <img src="../assets/edit.png" alt="edit" title="Edit student info" />
-                    <img src="../assets/search.png" alt="details" title="Details" />
-                </td>
-            </tr>
+
         </table>
     </div>
 </template>
 
-<script lang="ts">
+<script>
+import api from '@/StudentsApiService';
+
 export default {
-    name: "ListStudents",
-    props: {
-        msg: String,
-    }
+    data() {
+        return {
+            students: []
+        }
+    },
+    mounted() {
+        setTimeout(() => {
+            this.getStudents();
+        }, 500);
+
+    },
+    created() {
+        api.getAccessToken();
+    },
+    methods: {
+        getStudents() {
+            api.getAll()
+                .then(response => {
+                    this.students = response;
+                });
+        },
+        changeState(studentId) {
+            let student = this.students.filter(e => e.studentId == studentId)
+            this.$store.commit("changeStudent", student[0])
+        },
+        deleteStudent(studentId) {
+            api.delete(studentId).then(
+                this.students = this.students.filter(e => e.studentId != studentId));
+        }
+    },
+    name: "ListStudents"
+
 };
 </script>
 

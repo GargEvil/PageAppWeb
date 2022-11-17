@@ -79,7 +79,7 @@ namespace IdentityServerHost.Quickstart.UI
         {
             // check if we are in the context of an authorization request
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
-            model.ReturnUrl = "http://localhost:8080"; //<- Add here localhost of Vue.js App
+            //model.ReturnUrl = "http://localhost:8080"; //<- Add here localhost of Vue.js App
             // the user clicked the "cancel" button
             if (button != "login")
             {

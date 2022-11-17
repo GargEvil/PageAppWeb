@@ -33,9 +33,11 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx",
-    "src/main.js",
-    "src/main.js",
-    "src/router/index.js"
+    "src/main.ts",
+    "src/main.ts",
+    "src/router/index.ts",
+    "src/StudentsApiService.js",
+    "src/StudentsApiService.js"
   ],
   "exclude": [
     "node_modules"

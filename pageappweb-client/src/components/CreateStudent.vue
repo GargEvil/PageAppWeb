@@ -1,5 +1,7 @@
 <template>
-    <h1>new student</h1>
+    <div class="header">
+        <h1>Create Student</h1>
+    </div>
     <form action="/action_page.php">
         <label for="fname">First name:</label><br>
         <input type="text" id="fname" name="fname" value="John"><br>

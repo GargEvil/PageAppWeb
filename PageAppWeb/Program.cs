@@ -14,7 +14,15 @@ builder.Services.AddSwaggerGen();
 IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 builder.Services.AddPersistance(configuration);
 builder.Services.AddServices();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        builder => builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .SetPreflightMaxAge(TimeSpan.FromMinutes(60))
+        );
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,6 +37,8 @@ app.UseMiddleware<GlobalExceptionHandler>();
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 
