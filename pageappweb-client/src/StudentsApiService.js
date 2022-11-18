@@ -39,7 +39,7 @@ export default {
         return this.execute('post', '/', data)
     },
     update(id, data) {
-        return this.execute('update', `/${id}`, data)
+        return this.execute('put', `/${id}`, data)
     },
     delete(id) {
         return this.execute('delete', `/${id}`)

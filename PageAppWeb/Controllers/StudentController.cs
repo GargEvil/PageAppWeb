@@ -29,7 +29,7 @@ public class StudentController : ControllerBase
         return Ok();
     }
 
-    [HttpPut("update/{id}")]
+    [HttpPut("put/{id}")]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] StudentDTO student)
     {
         return Ok(await _studentService.UpdateStudent(id, student));

@@ -1,10 +1,13 @@
 <template>
     <div class="header">
         <h1>Students</h1>
+        <p class="row">
+            <router-link to="/ListCourses">Courses</router-link>
+        </p>
     </div>
     <div class="tableContainer">
         <button>
-            <router-link to="/CreateStudent">Add</router-link>
+            <router-link to="/CreateStudent" style="color:white; text-decoration:none;">Add</router-link>
         </button>
 
         <table>
@@ -21,13 +24,13 @@
                 <td>{{ item.indexNumber }}</td>
                 <td>{{ item.year }}</td>
                 <td class="test">
-                    <img src="../assets/delete.png" alt="delete" title="Delete student"
+                    <img src="../../assets/delete.png" alt="delete" title="Delete student"
                         @click="deleteStudent(item.studentId)" />
                     <router-link to='/UpdateStudent/{{item.studentId}}' @click="changeState(item.studentId)"><img
-                            src="../assets/edit.png" alt="edit" title="Edit student info" />
+                            src="../../assets/edit.png" alt="edit" title="Edit student info" />
                     </router-link>
                     <router-link to='/StudentDetails/{{item.studentId}}' @click="changeState(item.studentId)"><img
-                            src="../assets/search.png" alt="details" title="Details" />
+                            src="../../assets/search.png" alt="details" title="Details" />
                     </router-link>
                 </td>
             </tr>
