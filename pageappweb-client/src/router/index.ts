@@ -5,6 +5,7 @@ import UpdateStudent from '@/components/student/UpdateStudent.vue'
 import ListCourses from '@/components/course/ListCourses.vue'
 import CourseDetails from '@/components/course/CourseDetails.vue'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import CreateCourse from '@/components/course/CreateCourse.vue'
 
 
 
@@ -46,6 +47,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/CourseDetails/:courseId',
     name: 'CourseDetails',
     component: CourseDetails
+  },
+  {
+    path: '/CreateCourse',
+    name: 'CreateCourse',
+    component: CreateCourse
   }
 ]
 
