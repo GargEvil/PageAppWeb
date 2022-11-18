@@ -29,12 +29,12 @@ public class StudentRepository : IStudentRepository
     public async Task<List<Student>> GetAll()
     {
         IDbConnection connection = _context.Database.GetDbConnection();
-       
+
         connection.Open();
-
         var record = await connection.QueryMultipleAsync("GetAllStudentsSP", commandType: CommandType.StoredProcedure);
-
-        return record.Read<Student>().ToList();   
+        var result = record.Read<Student>().ToList();
+        connection.Close();
+        return result;
     }
 
     public async Task<Student> GetById(int id)

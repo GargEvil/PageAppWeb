@@ -9,10 +9,27 @@
                     <label for="name">Name:</label><br>
                 </div>
                 <div class="col-75">
-                    <input v-model="course.name" type="text" placeholder="Enter course name" /><br>
+                    <input v-model="courseName" type="text" placeholder="Enter course name" /><br>
                 </div>
             </div>
-            <div class="col-75">
+            <div>
+                <table>
+                    <tr>
+                        <th>Pick a student</th>
+                        <th>
+
+                        </th>
+                    </tr>
+                    <tr v-for="item in students">
+                        <td>{{ item.name }} {{ item.surname }}</td>
+                        <td class="test">
+                            <button type="button" @click="addStudent(item)"><img src="../../assets/plus.png" alt="plus"
+                                    title="plus" />
+                            </button>
+                        </td>
+                    </tr>
+
+                </table>
             </div>
             <div class="row">
                 <input class="submit" type="submit" value="Submit">
@@ -34,10 +51,9 @@ import api from "@/StudentsApiService";
 export default {
     data() {
         return {
-            course: {
-                name: "",
-                students: []
-            }
+            courseName: '',
+            students: [],
+            selectedStudents: []
         }
 
     },
@@ -53,20 +69,23 @@ export default {
     methods: {
         getStudents() {
             api.getAll().then((response) => {
-                this.course.students = response;
+                this.students = response;
             });
+        },
+        addStudent(student) {
+            this.selectedStudents.push(student);
+            this.students = this.students.filter(e => e.studentId != student.studentId);
+            console.log("seleceted", this.selectedStudents);
         },
         onSubmit(e) {
             e.preventDefault()
-            console.log(this.course);
-            const NewInformation = {
-                name: this.student.name,
-                students: [{
-                    statusName: this.student.selected,
-                    studentStatusId: this.student.studentStatus
-                }],
+            console.log(this.courseName);
+            const newCourse = {
+                courseName: this.courseName,
+                students: this.selectedStudents
             }
-            api.create(NewInformation).then(this.$router.push('/'));
+            console.log("new", newCourse);
+            apiCourse.create(newCourse).then(this.$router.push('/'));
         }
     },
 

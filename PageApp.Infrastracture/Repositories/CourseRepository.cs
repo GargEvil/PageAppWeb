@@ -13,9 +13,8 @@ internal class CourseRepository : ICourseRepository
 
     public async Task AddCourse(Course course)
     {
-
         _context.Courses.Add(course);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
     public async Task<List<Course>> GetAll()
@@ -25,6 +24,6 @@ internal class CourseRepository : ICourseRepository
 
     public async Task<Course> GetById(int id)
     {
-        return await _context.Courses.FirstOrDefaultAsync(e => e.CourseId == id);
+        return await _context.Courses.Include(e => e.Student).FirstOrDefaultAsync(e => e.CourseId == id);
     }
 }

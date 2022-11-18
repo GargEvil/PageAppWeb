@@ -88,6 +88,7 @@ public class Mapper : IMapper
         {
             students.Add(new Student
             {
+                StudentId = studentDto.StudentId,
                 StudentStatusId = studentDto.StudentStatusId,
                 Name = studentDto.Name,
                 Year = studentDto.Year,
