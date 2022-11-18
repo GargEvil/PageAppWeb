@@ -2,7 +2,7 @@
     <div class="header">
         <h1>Students</h1>
         <p class="row">
-            <router-link to="/ListCourses">Courses</router-link>
+            <router-link to="/courses" style="color:white;">Courses</router-link>
         </p>
     </div>
     <div class="tableContainer">

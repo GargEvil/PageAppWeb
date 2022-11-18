@@ -6,4 +6,5 @@ public interface ICourseRepository
 {
     Task AddCourse(Course course);
     Task<List<Course>> GetAll();
+    Task<Course> GetById(int id);
 }

@@ -22,9 +22,9 @@ public class CourseController : ControllerBase
     }
 
     [HttpPost("post")]
-    public async Task<ActionResult> Add([FromBody] CourseDTO student)
+    public async Task<ActionResult> Add([FromBody] CourseDTO course)
     {
-        await _courseService.AddCourse(student);
+        await _courseService.AddCourse(course);
         return Ok();
     }
 }

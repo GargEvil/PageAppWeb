@@ -3,7 +3,9 @@ import CreateStudent from '@/components/student/CreateStudent.vue'
 import StudentDetails from '@/components/student/StudentDetails.vue'
 import UpdateStudent from '@/components/student/UpdateStudent.vue'
 import ListCourses from '@/components/course/ListCourses.vue'
+import CourseDetails from '@/components/course/CourseDetails.vue'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -39,6 +41,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/UpdateStudent/:studentId',
     name: 'UpdateStudent',
     component: UpdateStudent
+  },
+  {
+    path: '/CourseDetails/:courseId',
+    name: 'CourseDetails',
+    component: CourseDetails
   }
 ]
 

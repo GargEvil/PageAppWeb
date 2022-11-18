@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from './store'
 
 const client = axios.create({
-    baseURL: 'https://localhost:7024/api/student/',
+    baseURL: 'https://localhost:7024/api/course/',
     json: true
 });
 
@@ -13,6 +13,7 @@ const tokenConfig = {
     client_id: 'pageAppWeb',
     client_secret: 'pageApp'
 }
+
 export default {
     execute(method, resource, data) {
         if (accessToken == undefined) {
@@ -34,15 +35,6 @@ export default {
     },
     create(data) {
         return this.execute('post', '/', data)
-    },
-    update(id, data) {
-        return this.execute('put', `/${id}`, data)
-    },
-    delete(id) {
-        return this.execute('delete', `/${id}`)
-    },
-    getStudentsByCourseId(courseId) {
-        return this.execute('get', `/${courseId}`)
     },
     getAccessToken() {
         axios.post("https://localhost:7138/connect/token",

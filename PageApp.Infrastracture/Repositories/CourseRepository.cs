@@ -13,12 +13,17 @@ internal class CourseRepository : ICourseRepository
 
     public async Task AddCourse(Course course)
     {
-        _context.Add(course);
+        _context.Courses.Add(course);
         await _context.SaveChangesAsync();
     }
 
     public async Task<List<Course>> GetAll()
     {
         return await _context.Courses.ToListAsync();
+    }
+
+    public async Task<Course> GetById(int id)
+    {
+        return await _context.Courses.FirstOrDefaultAsync(e => e.CourseId == id);
     }
 }

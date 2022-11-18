@@ -5,7 +5,8 @@ import Vue from 'vue';
 export default createStore({
   state: {
     student: {},
-    accessToken: {}
+    accessToken: {},
+    course: {}
   },
   getters: {
     student: state => {
@@ -13,6 +14,9 @@ export default createStore({
     },
     accessToken: state => {
       return state.accessToken;
+    },
+    course: state => {
+      return state.course;
     }
   },
   mutations: {
@@ -20,9 +24,10 @@ export default createStore({
       state.student = student;
     },
     changeAccessToken(state, accessToken) {
-      console.log("kad do ovog dodje");
-
       state.accessToken = accessToken;
+    },
+    changeCourse(state, course) {
+      state.course = course;
     }
   },
   actions: {

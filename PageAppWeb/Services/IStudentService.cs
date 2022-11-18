@@ -8,4 +8,5 @@ public interface IStudentService
     Task AddStudent(StudentDTO student);
     Task<StudentDTO> UpdateStudent(int id, StudentDTO student);
     Task DeleteStudent(int id);
+    Task<List<StudentDTO>> GetStudentsByCourseId(int courseId);
 }

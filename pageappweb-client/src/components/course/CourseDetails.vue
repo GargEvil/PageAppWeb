@@ -1,25 +1,23 @@
 <template>
     <div class="header">
-        <h1>Courses</h1>
+        <h1>Course Details</h1>
     </div>
     <div class="tableContainer">
-        <button>
-            <router-link to="/CreateCourse">Add</router-link>
-        </button>
-
         <table>
             <tr>
-                <th>Course Name</th>
+                <th>Student Going To Course</th>
                 <th>
 
                 </th>
             </tr>
-            <tr v-for="item in courses" :key="courseId">
-                <td>{{ item.courseName }}</td>
+            <tr v-for="item in students" :key="studentId">
+                <!--v-for="item in courses" :key="courseId"-->
+                <td {{ item.firstName }}></td>
+                <!--{{ item.courseName }}-->
                 <td class="test">
-                    <router-link to='/CourseDetails/{{item.courseId}}' @click="changeState(item.courseId)"><img
+                    <!-- <router-link to='/CourseDetails/{{item.courseId}}' @click="changeState(item.courseId)"><img
                             src="../../assets/search.png" alt="details" title="Details" />
-                    </router-link>
+                    </router-link> -->
                 </td>
             </tr>
 
@@ -28,34 +26,33 @@
 </template>
 
 <script>
-import api from '@/CourseApiService'
+import api from '@/StudentsApiService'
+
 export default {
     data() {
         return {
-            courses: []
+            course: {},
+            students: []
         }
     },
     mounted() {
         setTimeout(() => {
-            this.getCourses();
+            this.getStudentsForCourse();
         }, 500);
     },
     created() {
+        this.course = this.$store.getters.course;
         api.getAccessToken();
     },
     methods: {
-        getCourses() {
-            api.getAll()
+        getStudentsForCourse() {
+            api.getStudentsByCourseId(this.course.courseId)
                 .then(response => {
-                    this.courses = response;
+                    this.students = response;
                 });
-        },
-        changeState(courseId) {
-            let course = this.courses.filter(e => e.courseId == courseId)
-            this.$store.commit("changeCourse", course[0])
         }
     },
-    name: "ListCourses"
+    name: "CourseDetails"
 
 };
 </script>

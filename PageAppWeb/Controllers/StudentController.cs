@@ -41,4 +41,10 @@ public class StudentController : ControllerBase
         await _studentService.DeleteStudent(id);
         return Ok();
     }
+
+    [HttpGet("get/{courseId}")]
+    public async Task<ActionResult> GetByCourseId([FromRoute] int courseId)
+    {
+        return Ok(await _studentService.GetStudentsByCourseId(courseId));
+    }
 }

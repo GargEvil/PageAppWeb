@@ -78,8 +78,6 @@ export default {
         onSubmit(e) {
 
             e.preventDefault()
-            console.log(this.student);
-
             const newInformation = {
                 studentId: this.student.studentId,
                 name: this.student.name,
