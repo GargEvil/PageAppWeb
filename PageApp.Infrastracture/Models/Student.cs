@@ -4,7 +4,7 @@ public class Student
 {
     public Student()
     {
-        Courses = new HashSet<Course>();
+        Course = new HashSet<Course>();
     }
 
     public int StudentId { get; set; }
@@ -13,5 +13,5 @@ public class Student
     public string Surname { get; set; } = string.Empty;
     public int Year { get; set; }
     public int StudentStatusId { get; set; }
-    public virtual ICollection<Course> Courses { get; set; }
+    public virtual ICollection<Course> Course { get; set; }
 }

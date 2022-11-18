@@ -76,7 +76,7 @@ public class Mapper : IMapper
         {
             CourseId = courseDTO.CourseId,
             CourseName = courseDTO.CourseName,
-            Students = MapToStudentListDomainModel(courseDTO.Students)
+            Student = MapToStudentListDomainModel(courseDTO.Students)
         };
     }
 
@@ -117,7 +117,7 @@ public class Mapper : IMapper
             {
                 CourseId = course.CourseId,
                 CourseName = course.CourseName,
-                Students = await MapToListStudentDtoAsync(course.Students)
+                Students = await MapToListStudentDtoAsync(course.Student)
             });
         }
 

@@ -46,7 +46,7 @@ public class StudentService : IStudentService
     {
         var course = await _courseRepository.GetById(courseId);
 
-        return await _mapper.MapToListStudentDtoAsync(course.Students);
+        return await _mapper.MapToListStudentDtoAsync(course.Student);
     }
 
     public async Task<StudentDTO> UpdateStudent(int id, StudentDTO student)
