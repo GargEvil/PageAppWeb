@@ -66,6 +66,7 @@ export default {
         },
         changeState(studentId) {
             let student = this.students.filter(e => e.studentId == studentId)
+            student[0].statusName = student[0].studentStatus.statusName
             this.$store.commit("changeStudent", student[0])
         },
         deleteStudent(studentId) {
