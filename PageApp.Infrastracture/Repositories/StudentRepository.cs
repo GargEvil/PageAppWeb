@@ -39,7 +39,9 @@ public class StudentRepository : IStudentRepository
 
     public async Task<Student> GetById(int id)
     {
-        return await _context.Students.FirstOrDefaultAsync(e => e.StudentId == id);
+        return await _context.Students
+            .AsNoTracking()
+            .FirstOrDefaultAsync(e => e.StudentId == id);
     }
 
     public async Task<Student> Update(Student student)

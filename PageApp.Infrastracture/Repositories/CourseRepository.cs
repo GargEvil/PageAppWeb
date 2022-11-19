@@ -13,7 +13,7 @@ internal class CourseRepository : ICourseRepository
 
     public async Task AddCourse(Course course)
     {
-        _context.Courses.Add(course);
+        _context.Courses.Attach(course);
         await _context.SaveChangesAsync();
     }
 
