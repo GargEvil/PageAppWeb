@@ -1,10 +1,10 @@
-﻿using PageApp.Infrastracture.Models;
+﻿using PageApp.Infrastracture.Abstractions;
+using PageApp.Infrastracture.Models;
 
 namespace PageApp.Infrastracture.Repositories;
 
-public interface ICourseRepository
+public interface ICourseRepository : IRepository<Course>
 {
-    Task AddCourse(Course course);
-    Task<List<Course>> GetAll();
-    Task<Course> GetById(int id);
+    Course GetByIdWithInclude(int id, string include);
+    void Attach(Course course);
 }

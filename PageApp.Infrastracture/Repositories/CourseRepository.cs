@@ -1,29 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PageApp.Infrastracture.Abstractions;
 using PageApp.Infrastracture.Models;
 
 namespace PageApp.Infrastracture.Repositories;
-internal class CourseRepository : ICourseRepository
+internal class CourseRepository : Repository<Course>, ICourseRepository
 {
-    private readonly PageAppDbContext _context;
-
-    public CourseRepository(PageAppDbContext context)
+    private readonly PageAppDbContext _dbContext;
+    public CourseRepository(PageAppDbContext context) : base(context)
     {
-        _context = context;
+        _dbContext = context;
     }
 
-    public async Task AddCourse(Course course)
+    public void Attach(Course course)
     {
-        _context.Courses.Attach(course);
-        await _context.SaveChangesAsync();
+        _dbContext.Courses.Attach(course);
     }
 
-    public async Task<List<Course>> GetAll()
+    public Course GetByIdWithInclude(int id, string include)
     {
-        return await _context.Courses.Include(e => e.Student).ToListAsync();
-    }
-
-    public async Task<Course> GetById(int id)
-    {
-        return await _context.Courses.Include(e => e.Student).FirstOrDefaultAsync(e => e.CourseId == id);
+        return _dbContext.Courses.Include(include).Where(e => e.CourseId == id).FirstOrDefault();
     }
 }

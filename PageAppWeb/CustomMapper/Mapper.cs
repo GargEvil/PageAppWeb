@@ -29,7 +29,7 @@ public class Mapper : IMapper
 
     public async Task<StudentStatusDTO> MapToStudentStatusDto(int studentStatusId)
     {
-        var status = await _studentStatusRepository.GetStudentStatusById(studentStatusId);
+        var status = _studentStatusRepository.Get(studentStatusId);
         return new StudentStatusDTO
         {
             StudentStatusId = status.StudentStatusId,
@@ -37,7 +37,7 @@ public class Mapper : IMapper
         };
     }
 
-    public async Task<List<StudentDTO>> MapToListStudentDtoAsync(ICollection<Student> students)
+    public async Task<List<StudentDTO>> MapToListStudentDtoAsync(IEnumerable<Student> students)
     {
         var studentDtos = new List<StudentDTO>();
 
@@ -108,7 +108,7 @@ public class Mapper : IMapper
         };
     }
 
-    public async Task<List<CourseDTO>> MapToCourseDtoList(List<Course> courses)
+    public async Task<List<CourseDTO>> MapToCourseDtoList(IEnumerable<Course> courses)
     {
         var courseDTOs = new List<CourseDTO>();
 

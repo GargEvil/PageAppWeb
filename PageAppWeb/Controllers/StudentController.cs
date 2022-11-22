@@ -32,7 +32,8 @@ public class StudentController : ControllerBase
     [HttpPut("put/{id}")]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] StudentDTO student)
     {
-        return Ok(await _studentService.UpdateStudent(id, student));
+        await _studentService.UpdateStudent(id, student);
+        return Ok();
     }
 
     [HttpDelete("delete/{id}")]

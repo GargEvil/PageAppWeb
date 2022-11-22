@@ -1,19 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PageApp.Infrastracture.Abstractions;
 using PageApp.Infrastracture.Models;
 
 namespace PageApp.Infrastracture.Repositories;
 
-public class StudentStatusRepository : IStudentStatusRepository
+internal class StudentStatusRepository : Repository<StudentStatus>, IStudentStatusRepository
 {
-    private readonly PageAppDbContext _dbContext;
-
-    public StudentStatusRepository(PageAppDbContext dbContext)
+    public StudentStatusRepository(PageAppDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
-    }
-
-    public async Task<StudentStatus> GetStudentStatusById(int studentStatusId)
-    {
-        return await _dbContext.StudentStatuses.FirstOrDefaultAsync(e => e.StudentStatusId == studentStatusId);
     }
 }

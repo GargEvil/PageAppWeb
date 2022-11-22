@@ -1,4 +1,5 @@
 ﻿using Moq;
+using PageApp.Infrastracture.Abstractions;
 using PageApp.Infrastracture.Models;
 using PageApp.Infrastracture.Repositories;
 using PageAppWeb.CustomMapper;
@@ -11,12 +12,17 @@ public class StudentServiceTests
 {
     private readonly Mock<IStudentRepository> _studentRepositoryMock = new();
     private readonly Mock<IMapper> _mapperMock = new();
+    private readonly Mock<ICourseRepository> _courseRepositoryMock = new();
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly StudentService _studentService;
 
 
     public StudentServiceTests()
     {
-        _studentService = new StudentService(_studentRepositoryMock.Object, _mapperMock.Object);
+        _studentService = new StudentService(_studentRepositoryMock.Object,
+            _mapperMock.Object,
+            _courseRepositoryMock.Object,
+            _unitOfWorkMock.Object);
     }
 
     [Fact]
@@ -37,22 +43,22 @@ public class StudentServiceTests
     public async Task DeleteStudent_ShouldReturnStudentFromDb_EnsureDeleteCalledOnce()
     {
         //Arrange
-        _studentRepositoryMock.Setup(e => e.GetById(It.IsAny<int>())).ReturnsAsync(Mock.Of<Student>());
-        _studentRepositoryMock.Setup(e => e.Delete(It.IsAny<Student>())).Verifiable();
+        _studentRepositoryMock.Setup(e => e.Get(It.IsAny<int>())).Returns(Mock.Of<Student>());
+        _studentRepositoryMock.Setup(e => e.Remove(It.IsAny<Student>())).Verifiable();
 
         //Act
         await _studentService.DeleteStudent(It.IsAny<int>());
 
         //Assert
-        _studentRepositoryMock.Verify(x => x.Delete(It.IsAny<Student>()), Times.Once);
+        _studentRepositoryMock.Verify(x => x.Remove(It.IsAny<Student>()), Times.Once);
     }
 
     [Fact]
     public async Task DeleteStudent_ShouldThrowException_EnsureDeleteIsNotCalled()
     {
         //Arrange
-        _studentRepositoryMock.Setup(e => e.GetById(It.IsAny<int>())).ReturnsAsync(() => null);
-        _studentRepositoryMock.Setup(e => e.Delete(It.IsAny<Student>())).Verifiable();
+        _studentRepositoryMock.Setup(e => e.Get(It.IsAny<int>())).Returns(() => null);
+        _studentRepositoryMock.Setup(e => e.Remove(It.IsAny<Student>())).Verifiable();
         var id = 3333;
 
         //Act
@@ -62,31 +68,29 @@ public class StudentServiceTests
 
         //Assert
         Assert.Equal("Student with given id 3333 is not found!", result.Message);
-        _studentRepositoryMock.Verify(x => x.Delete(It.IsAny<Student>()), Times.Never);
+        _studentRepositoryMock.Verify(x => x.Remove(It.IsAny<Student>()), Times.Never);
     }
 
     [Fact]
-    public async Task UpdateStudent_ShouldReturnStudentFromDb_EnsureUpdateCalledOnce()
+    public async Task UpdateStudent_ShouldReturnStudentFromDb_EnsureUnitOfWorkCalledOnce()
     {
         //Arrange
-        _studentRepositoryMock.Setup(e => e.GetById(It.IsAny<int>())).ReturnsAsync(Mock.Of<Student>());
-        _studentRepositoryMock.Setup(e => e.Update(It.IsAny<Student>())).ReturnsAsync(It.IsAny<Student>());
-        _mapperMock.Setup(e => e.MapToViewModelAsync(It.IsAny<Student>())).ReturnsAsync(It.IsAny<StudentDTO>());
+        _studentRepositoryMock.Setup(e => e.Get(It.IsAny<int>())).Returns(Mock.Of<Student>());
+        _unitOfWorkMock.Setup(e => e.SaveChangesAsync(It.IsAny<CancellationToken>()));
 
         //Act
         await _studentService.UpdateStudent(It.IsAny<int>(), Mock.Of<StudentDTO>());
 
         //Assert
-        _studentRepositoryMock.Verify(e => e.Update(It.IsAny<Student>()), Times.Once);
-        _mapperMock.Verify(e => e.MapToViewModelAsync(It.IsAny<Student>()), Times.Once);
+        _unitOfWorkMock.Verify(e => e.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
-    public async Task UpdateStudent_ShouldThrowException_EnsureUpdateIsNeverCalled()
+    public async Task UpdateStudent_ShouldThrowException_EnsureUnitOfWorkIsNeverCalled()
     {
         //Arrange
-        _studentRepositoryMock.Setup(e => e.GetById(It.IsAny<int>())).ReturnsAsync(() => null);
-        _studentRepositoryMock.Setup(e => e.Update(It.IsAny<Student>())).Verifiable();
+        _studentRepositoryMock.Setup(e => e.Get(It.IsAny<int>())).Returns(() => null);
+        _unitOfWorkMock.Setup(e => e.SaveChangesAsync(It.IsAny<CancellationToken>()));
         var id = 4421;
 
         //Act
@@ -95,6 +99,6 @@ public class StudentServiceTests
 
         //Assert
         Assert.Equal("Student with given id 4421 is not found!", result.Message);
-        _studentRepositoryMock.Verify(x => x.Update(It.IsAny<Student>()), Times.Never);
+        _unitOfWorkMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }

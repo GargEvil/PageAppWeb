@@ -1,10 +1,11 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using PageApp.Infrastracture.Abstractions;
 using PageApp.Infrastracture.Models;
 
 namespace PageApp.Infrastracture;
 
-public partial class PageAppDbContext : DbContext
+public partial class PageAppDbContext : DbContext, IUnitOfWork
 {
 
     public PageAppDbContext(DbContextOptions options)
