@@ -1,4 +1,6 @@
-﻿using PageApp.Infrastracture.Abstractions;
+﻿using Mapster;
+using PageApp.Infrastracture.Abstractions;
+using PageApp.Infrastracture.Models;
 using PageApp.Infrastracture.Repositories;
 using PageAppWeb.CustomMapper;
 using PageAppWeb.DTOs;
@@ -11,12 +13,12 @@ internal class CourseService : ICourseService
     private readonly ICourseRepository _courseRepository;
     private readonly IStudentRepository _studentRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
 
-    public CourseService(ICourseRepository courseRepository, IMapper mapper, IStudentRepository studentRepository, IUnitOfWork unitOfWork)
+    public CourseService(ICourseRepository courseRepository,
+        IStudentRepository studentRepository,
+        IUnitOfWork unitOfWork)
     {
         _courseRepository = courseRepository;
-        _mapper = mapper;
         _studentRepository = studentRepository;
         _unitOfWork = unitOfWork;
     }
@@ -24,13 +26,15 @@ internal class CourseService : ICourseService
     public async Task AddCourse(CourseDTO course)
     {
         CheckIfStudentsExist(course);
-        _courseRepository.Attach(_mapper.MapToCourseDomainModel(course));
+        var courseDb = course.Adapt<Course>();
+        _courseRepository.Attach(courseDb);
         await _unitOfWork.SaveChangesAsync(CancellationToken.None);
     }
 
     public async Task<List<CourseDTO>> GetAll()
     {
-        return await _mapper.MapToCourseDtoList(_courseRepository.GetAll());
+        var courses = _courseRepository.GetAllWithInclude("Student");
+        return courses.Adapt<List<CourseDTO>>();
     }
 
     private void CheckIfStudentsExist(CourseDTO course)

@@ -1,12 +1,21 @@
-﻿namespace PageAppWeb.DTOs;
+﻿using PageApp.Infrastracture.Models;
 
-public class CourseDTO
+namespace PageAppWeb.DTOs;
+
+public class CourseDTO : BaseDTO<CourseDTO, Course>
 {
     public CourseDTO()
     {
         Students = new List<StudentDTO>();
     }
+
     public int CourseId { get; set; }
     public string CourseName { get; set; } = string.Empty;
-    public virtual List<StudentDTO>? Students { get; set; }
+    public List<StudentDTO>? Students { get; set; }
+
+    public override void AddCustomMappings()
+    {
+        SetCustomMappingsInverse()
+            .Map(dest => dest.Students, src => src.Student);
+    }
 }

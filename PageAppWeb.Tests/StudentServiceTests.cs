@@ -11,7 +11,6 @@ namespace PageAppWeb.Tests;
 public class StudentServiceTests
 {
     private readonly Mock<IStudentRepository> _studentRepositoryMock = new();
-    private readonly Mock<IMapper> _mapperMock = new();
     private readonly Mock<ICourseRepository> _courseRepositoryMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly StudentService _studentService;
@@ -20,7 +19,6 @@ public class StudentServiceTests
     public StudentServiceTests()
     {
         _studentService = new StudentService(_studentRepositoryMock.Object,
-            _mapperMock.Object,
             _courseRepositoryMock.Object,
             _unitOfWorkMock.Object);
     }
@@ -32,7 +30,7 @@ public class StudentServiceTests
         _studentRepositoryMock.Setup(e => e.Add(It.IsAny<Student>())).Verifiable();
 
         //Act
-        await _studentService.AddStudent(It.IsAny<StudentDTO>());
+        await _studentService.AddStudent(Mock.Of<StudentDTO>());
 
         //Assert
         _studentRepositoryMock.Verify(x => x.Add(It.IsAny<Student>()), Times.Once);

@@ -1,4 +1,6 @@
-﻿using PageApp.Infrastracture.Abstractions;
+﻿using Mapster;
+using PageApp.Infrastracture.Abstractions;
+using PageApp.Infrastracture.Models;
 using PageApp.Infrastracture.Repositories;
 using PageAppWeb.CustomMapper;
 using PageAppWeb.DTOs;
@@ -11,22 +13,19 @@ public class StudentService : IStudentService
     private readonly IStudentRepository _studentRepository;
     private readonly ICourseRepository _courseRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
 
     public StudentService(IStudentRepository studentRepository,
-        IMapper mapper,
         ICourseRepository courseRepository,
         IUnitOfWork unitOfWork)
     {
         _studentRepository = studentRepository;
-        _mapper = mapper;
         _courseRepository = courseRepository;
         _unitOfWork = unitOfWork;
     }
 
     public async Task AddStudent(StudentDTO student)
     {
-        _studentRepository.Add(_mapper.MapToStudentDomainModel(student));
+        _studentRepository.Add(student.ToEntity());
         await _unitOfWork.SaveChangesAsync(CancellationToken.None);
     }
 
@@ -44,15 +43,14 @@ public class StudentService : IStudentService
     public async Task<List<StudentDTO>> GetAllStudents()
     {
         var students = _studentRepository.GetAll();
-
-        return await _mapper.MapToListStudentDtoAsync(students);
+        return students.Adapt<List<StudentDTO>>();
     }
 
     public async Task<List<StudentDTO>> GetStudentsByCourseId(int courseId)
     {
         var course = _courseRepository.GetByIdWithInclude(courseId, "Student");
 
-        return await _mapper.MapToListStudentDtoAsync(course.Student);
+        return course.Student.Adapt<List<StudentDTO>>();
     }
 
     public async Task UpdateStudent(int id, StudentDTO student)
@@ -62,12 +60,7 @@ public class StudentService : IStudentService
         if (studentToBeUpdated == null)
             throw new StudentNotFoundException(id);
 
-        studentToBeUpdated.Name = student.Name;
-        studentToBeUpdated.Surname = student.Surname;
-        studentToBeUpdated.IndexNumber = student.IndexNumber;
-        studentToBeUpdated.StudentStatusId = student.StudentStatusId;
-        studentToBeUpdated.Year = student.Year;
-
+        studentToBeUpdated = student.Adapt<Student>();
         await _unitOfWork.SaveChangesAsync(CancellationToken.None);
     }
 

@@ -12,7 +12,7 @@
             </tr>
             <tr v-for="item in students">
                 <!--v-for="item in courses" :key="courseId"-->
-                <td>{{ item.name }} {{ item.surname }}</td>
+                <td>{{ item.fullName }} </td>
                 <!--{{ item.courseName }}-->
                 <td class="test">
                     <!-- <router-link to='/CourseDetails/{{item.courseId}}' @click="changeState(item.courseId)"><img

@@ -16,6 +16,11 @@ internal class CourseRepository : Repository<Course>, ICourseRepository
         _dbContext.Courses.Attach(course);
     }
 
+    public List<Course> GetAllWithInclude(string include)
+    {
+        return _dbContext.Courses.Include(include).ToList();
+    }
+
     public Course GetByIdWithInclude(int id, string include)
     {
         return _dbContext.Courses.Include(include).Where(e => e.CourseId == id).FirstOrDefault();

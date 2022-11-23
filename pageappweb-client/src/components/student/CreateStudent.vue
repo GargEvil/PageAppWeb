@@ -41,10 +41,10 @@
                     <label for="studentStatus">Student status:</label><br>
                 </div>
                 <div class="col-75">
-                    <select v-model="student.studentStatus">
+                    <select v-model="student.selected">
                         <option disabled value="">Please select one</option>
-                        <option value=1>Redovan</option>
-                        <option value=2>Vanredan</option>
+                        <option value="Redovan">Redovan</option>
+                        <option value="Vanredan">Vanredan</option>
                     </select>
                 </div>
             </div>
@@ -85,15 +85,10 @@ export default {
         onSubmit(e) {
             e.preventDefault()
             const NewInformation = {
-                name: this.student.name,
-                surname: this.student.surname,
+                fullName: this.student.name + ' ' + this.student.surname,
                 indexNumber: this.student.indexNumber,
                 year: this.student.year,
-                studentStatus: {
-                    statusName: this.student.selected,
-                    studentStatusId: this.student.studentStatus
-                },
-                studentStatusId: this.student.studentStatus
+                studentStatus: this.student.selected
             }
             api.create(NewInformation).then(this.$router.push('/'));
         }

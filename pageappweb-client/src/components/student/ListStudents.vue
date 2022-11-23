@@ -20,7 +20,7 @@
                 </th>
             </tr>
             <tr v-for="item in students" :key="studentId">
-                <td>{{ item.name }} {{ item.surname }}</td>
+                <td>{{ item.fullName }}</td>
                 <td>{{ item.indexNumber }}</td>
                 <td>{{ item.year }}</td>
                 <td class="test">
